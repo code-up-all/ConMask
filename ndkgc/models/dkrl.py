@@ -29,7 +29,7 @@ class DKRL(object):
                  train_file,
                  valid_file,
                  test_file,
-                 all_triples_file,
+            #     all_triples_file,
                  oov_buckets=10,
                  learning_rate=0.001,
                  margin=1.0,
@@ -49,7 +49,7 @@ class DKRL(object):
         self.train_file = train_file
         self.valid_file = valid_file
         self.test_file = test_file
-        self.all_triples_file = all_triples_file
+  #     self.all_triples_file = all_triples_file
 
         valid_vocab_file(self.vocab_file)
 
@@ -184,13 +184,6 @@ class DKRL(object):
             self.test_matrix.load(np.asarray(test_triples), sess)
             del test_triples
 
-        all_triples = load_triples(self.all_triples_file,
-                                   entity_dict,
-                                   relation_dict)
-
-        self.triple_matrix.load(np.asarray(all_triples), sess)
-        del all_triples
-
         vocab = load_list(self.vocab_file)
 
         self.word_embedding.load(load_pretrained_embedding(self.pretrain_vocab_file,
@@ -312,12 +305,7 @@ class DKRL(object):
                                                         trainable=False,
                                                         collections=['static_variables'])
 
-                self.triple_matrix = tf.get_variable("all_triples",
-                                                     [count_line(self.all_triples_file), 3],
-                                                     dtype=tf.int32,
-                                                     trainable=False,
-                                                     collections=['static_variables'])
-
+               
             # Embeddings
             with tf.variable_scope(self.__embedding_scope):
                 self.entity_embedding = tf.get_variable("entity_embedding",
@@ -493,7 +481,7 @@ class DKRL(object):
                 tower_grads = list()
                 losses = list()
 
-            for gpu_id in range(4):
+            for gpu_id in range(1):
                 with tf.device('/gpu:%d' % gpu_id):
                     triple_score = self.inference(triples=triple_batch[gpu_id],
                                                   head_content_ids=head_content_ids_batch[gpu_id],
