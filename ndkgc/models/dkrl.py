@@ -51,7 +51,7 @@ class DKRL(object):
         self.test_file = test_file
   #     self.all_triples_file = all_triples_file
 
-        valid_vocab_file(self.vocab_file)
+ #       valid_vocab_file(self.vocab_file)
 
         self.oov_buckets = oov_buckets
 
