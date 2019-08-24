@@ -4,7 +4,7 @@ project(target_sampling)
 
 set(GCC_COVERAGE_LINK_FLAGS "python3 -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_link_flags()))'")
 
-set(CMAKE_CXX_FLAGS "-shared -fPIC -O2 -D_GLIBCXX_USE_CXX11_ABI=0" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS "-D_GLIBCXX_USE_CXX11_ABI=0" CACHE STRING "" FORCE)
 
 set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
