@@ -881,7 +881,7 @@ def main(_):
     head_precompute_ops, head_conv_embed, tail_precompute_ops, tail_conv_embed, \
     eval_op, reset_op, metric_op = model.eval(eval_type='test', batch_size=200)
 
-    saver = tf.train.Saver(max_to_keep=3, save_path='./checkpoints/dkrl')
+    saver = tf.train.Saver(max_to_keep=3)
 
     def train():
         with tf.Session(config=config) as sess:
@@ -897,7 +897,7 @@ def main(_):
             threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
             try:
-                saver.restore(sess=sess, save_path=tf.train.latest_checkpoint('./checkpoints/'))
+                saver.restore(sess=sess, save_path=tf.train.latest_checkpoint('./checkpoint/'))
             except tf.errors.NotFoundError:
                 tf.logging.error("You may have changed your model and there "
                                  "are new variables that can not be load from previous snapshot. "
