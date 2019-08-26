@@ -915,7 +915,7 @@ def main(_):
                         print("GSTEP:_%d_LOSS:_%.4f" % (global_step, loss), end='\r')
                     else:
                         sess.run(train_op)
-                        saver.save(sess, os.path.join(CHECKPOINT_DIR, 'dkrl.ckpt'), global_step=model.global_step)
+                        saver.save(sess, os.path.join(CHECKPOINT_DIR, 'model.ckpt'), global_step=model.global_step)
                         tf.logging.info("Model saved")
             except tf.errors.OutOfRangeError:
                 print("training done")
@@ -923,7 +923,7 @@ def main(_):
                 coord.request_stop()
             coord.join(threads)
 
-            saver.save(sess, os.path.join(CHECKPOINT_DIR, 'dkrl.ckpt'), global_step=model.global_step)
+            saver.save(sess, os.path.join(CHECKPOINT_DIR, 'model.ckpt'), global_step=model.global_step)
             tf.logging.info("Model saved")
 
     def eval():
@@ -941,9 +941,8 @@ def main(_):
             threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
             try:
-                if os.path.exists(os.path.join(CHECKPOINT_DIR, 'dkrl.ckpt')):
-                    saver.restore(sess=sess, save_path=tf.train.latest_checkpoint(os.path.join(CHECKPOINT_DIR, 'dkrl.ckpt')))
-                    tf.logging.info("Restored model @ %d" % sess.run(model.global_step))
+                saver.restore(sess=sess, save_path=tf.train.latest_checkpoint(os.path.join(CHECKPOINT_DIR, 'model.ckpt')))
+                tf.logging.info("Restored model @ %d" % sess.run(model.global_step))
             except tf.errors.NotFoundError:
                 tf.logging.error("You may have changed your model and there "
                                  "are new variables that can not be load from previous snapshot. "
