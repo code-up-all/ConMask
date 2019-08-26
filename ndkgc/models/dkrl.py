@@ -387,9 +387,9 @@ class DKRL(object):
                     name='train_triples_limited')
                 single_triple = tf.train.shuffle_batch([input_triples],
                                                        batch_size=1,
-                                                       capacity=min(batch_size * 40, self.train_matrix.get_shape()[0]),
+                                                       capacity=min(batch_size * 40, self.train_matrix.get_shape().as_list()[0]),
                                                        min_after_dequeue=min(batch_size * 15,
-                                                                             self.train_matrix.get_shape()[0]),
+                                                                             self.train_matrix.get_shape().as_list()[0]),
                                                        enqueue_many=True,
                                                        allow_smaller_final_batch=True,
                                                        name='train_shuffle_batch')
