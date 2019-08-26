@@ -858,7 +858,7 @@ def main(_):
     import os
 
     DATA_DIR = './data/dbpedia50/' #to use dbpedia50 dataset with DKRL model
-    CHECKPOINT_DIR='./checkpoint/dkrl.ckpt'
+    CHECKPOINT_DIR='./checkpoints/'
     model = DKRL(
         entity_file=os.path.join(DATA_DIR, 'entities.txt'),
         relation_file=os.path.join(DATA_DIR, 'relations.txt'),
@@ -900,7 +900,8 @@ def main(_):
             os.makedirs(CHECKPOINT_DIR, exist_ok=True)
             
             try:
-                saver.restore(sess=sess, save_path=tf.train.latest_checkpoint(CHECKPOINT_DIR))
+                if os.path.exists(os.path.join(CHECKPOINT_DIR, 'checkpoint')):
+                    saver.restore(sess=sess, save_path=tf.train.latest_checkpoint(os.path.join(CHECKPOINT_DIR, 'dkrl.ckpt')))
             except tf.errors.NotFoundError:
                 tf.logging.error("You may have changed your model and there "
                                  "are new variables that can not be load from previous snapshot. "
@@ -922,7 +923,7 @@ def main(_):
                 coord.request_stop()
             coord.join(threads)
 
-            saver.save(sess, "./checkpoint/dkrl.ckpt", global_step=model.global_step)
+            saver.save(sess, os.path.join(CHECKPOINT_DIR, 'dkrl.ckpt'), global_step=model.global_step)
             tf.logging.info("Model saved")
 
     def eval():
@@ -940,7 +941,7 @@ def main(_):
             threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
             try:
-                saver.restore(sess=sess, save_path=tf.train.latest_checkpoint(CHECKPOINT_DIR))
+                saver.restore(sess=sess, save_path=tf.train.latest_checkpoint(os.path.join(CHECKPOINT_DIR, 'dkrl.ckpt')))
             except tf.errors.NotFoundError:
                 tf.logging.error("You may have changed your model and there "
                                  "are new variables that can not be load from previous snapshot. "
