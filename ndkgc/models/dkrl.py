@@ -858,7 +858,7 @@ def main(_):
     import os
 
     DATA_DIR = './data/dbpedia50/' #to use dbpedia50 dataset with DKRL model
-    CHECKPOINT_DIR='./checkpoints/'
+    CHECKPOINT_DIR='../drive/My\ Drive/checkpoints/'
     model = DKRL(
         entity_file=os.path.join(DATA_DIR, 'entities.txt'),
         relation_file=os.path.join(DATA_DIR, 'relations.txt'),
@@ -912,6 +912,7 @@ def main(_):
                 cnt = 0
                 while not coord.should_stop():
                     cnt += 1
+                    print("Training for cnt ", cnt, end='\n\n');
                     if cnt % 10 == 0:
                         _, loss, global_step = sess.run([train_op, loss_op, model.global_step])
                         print("GSTEP:_%d_LOSS:_%.4f" % (global_step, loss), end='\r')
